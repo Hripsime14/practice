@@ -4,21 +4,25 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
+import com.cypress.myapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var fragment: IntroFragment
+    private lateinit var fragment: LoginFragment
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeActivityFullScreen()
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         hideActionBar()
         createFragment()
     }
 
 
     private fun createFragment() {
-        fragment = IntroFragment.newInstance()
+//        fragment = IntroFragment.newInstance()
+        fragment = LoginFragment.newInstance()
 
         supportFragmentManager
             .beginTransaction()
@@ -37,17 +41,4 @@ class MainActivity : AppCompatActivity() {
     private fun hideActionBar() {
         supportActionBar?.hide()
     }
-
-//TODO: Do we actually need to override this method?
-//    viewPager.addItemDecoration(object : RecyclerView.ItemDecoration(){
-//        override fun getItemOffsets(outRect: Rect, itemPosition: Int, parent: RecyclerView) {
-//        }
-//        override fun getItemOffsets(
-//            outRect: Rect,
-//            view: View,
-//            parent: RecyclerView,
-//            state: RecyclerView.State
-//        ) {
-//        }
-//    })
 }
