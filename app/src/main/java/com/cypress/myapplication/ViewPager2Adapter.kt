@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 class ViewPager2Adapter: RecyclerView.Adapter<ViewPager2Adapter.ViewHolder>() {
+
     private val diffCallBack = object : DiffUtil.ItemCallback<IntroItem>() {
         override fun areItemsTheSame(oldItem: IntroItem, newItem: IntroItem): Boolean =
             oldItem.title == newItem.title

@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <ImageView
         android:id="@+id/img"
         android:layout_width="300dp"
@@ -13,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="60dp"
         tools:layout_editor_absoluteY="150dp"
         tools:srcCompat="@tools:sample/avatars" />
 
