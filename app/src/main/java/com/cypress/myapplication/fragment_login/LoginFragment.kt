@@ -1,21 +1,21 @@
-package com.cypress.myapplication
+package com.cypress.myapplication.fragment_login
 
 import android.os.Bundle
-import android.text.method.HideReturnsTransformationMethod
-import android.text.method.PasswordTransformationMethod
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
+import com.cypress.myapplication.R
 import com.cypress.myapplication.Util.isEmailValid
-import com.cypress.myapplication.databinding.FragmentIntroBinding
 import com.cypress.myapplication.databinding.FragmentLoginBinding
+import com.cypress.myapplication.main.MainActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
+    private val viewModel: LoginViewModel by viewModel()
+
     private lateinit var binding: FragmentLoginBinding
     private lateinit var email: EditText
     private lateinit var pass: EditText
@@ -47,9 +47,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         login.setOnClickListener {
             if (isEmailValid(email.text.toString())) {
                 Toast.makeText(context, "Your email is valid", Toast.LENGTH_SHORT).show()
+                viewModel.setLoginFinished(true)
+                (activity as MainActivity).openActivity()
             } else {
                 Toast.makeText(context, "Your email is nottt valid", Toast.LENGTH_SHORT).show()
-
             }
         }
     }

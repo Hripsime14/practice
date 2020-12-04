@@ -1,29 +1,49 @@
-package com.cypress.myapplication
+package com.cypress.myapplication.main
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
+import androidx.fragment.app.Fragment
+import com.cypress.myapplication.NewActivity
+import com.cypress.myapplication.R
 import com.cypress.myapplication.databinding.ActivityMainBinding
+import com.cypress.myapplication.fragment_intro.IntroFragment
+import com.cypress.myapplication.fragment_login.LoginFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var fragment: LoginFragment
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         makeActivityFullScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         hideActionBar()
-        createFragment()
+        start()
+
     }
 
+    private fun start() {
+        if (viewModel.getIntroFinished() && viewModel.getLoginFinished()) {
+            openActivity()
+        } else if (!viewModel.getIntroFinished()) {
+            commitFragment(IntroFragment.newInstance())
+        } else {
+            commitFragment(LoginFragment.newInstance())
+        }
+    }
 
-    private fun createFragment() {
-//        fragment = IntroFragment.newInstance()
-        fragment = LoginFragment.newInstance()
+    fun openActivity() {
+        startActivity(Intent(this, NewActivity::class.java))
+        finish()
+    }
 
+    private fun commitFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.frame_layout, fragment)

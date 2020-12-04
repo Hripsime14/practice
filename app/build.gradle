@@ -40,6 +40,21 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.2.5"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.1'
+
+    // Koin AndroidX Scope features
+    implementation "org.koin:koin-androidx-scope:2.2.0"
+// Koin AndroidX ViewModel features
+    implementation "org.koin:koin-androidx-viewmodel:2.2.0"
+// Koin AndroidX Fragment features
+    implementation "org.koin:koin-androidx-fragment:2.2.0"
+// Koin AndroidX WorkManager
+    implementation "org.koin:koin-androidx-workmanager:2.2.0"
+// Koin AndroidX Jetpack Compose
+    implementation "org.koin:koin-androidx-compose:2.2.0"
+// Koin AndroidX Experimental features
+    implementation "org.koin:koin-androidx-ext:2.2.0"
+
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 

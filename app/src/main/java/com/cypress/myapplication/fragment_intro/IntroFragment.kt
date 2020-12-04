@@ -1,16 +1,24 @@
-package com.cypress.myapplication
+package com.cypress.myapplication.fragment_intro
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Button
+
 import androidx.viewpager2.widget.ViewPager2
+import com.cypress.myapplication.IntroItem
+import com.cypress.myapplication.R
+import com.cypress.myapplication.ViewPager2Adapter
 import com.cypress.myapplication.databinding.FragmentIntroBinding
+import com.cypress.myapplication.fragment_login.LoginFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_intro.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class IntroFragment : Fragment(R.layout.fragment_intro) {
+    private val viewModel: IntroViewModel by viewModel()
+
     private lateinit var binding: FragmentIntroBinding
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
@@ -42,20 +50,21 @@ class IntroFragment : Fragment(R.layout.fragment_intro) {
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance() =
             IntroFragment().apply {
                 arguments = Bundle().apply {
-
                 }
             }
     }
 
     private fun initItems() {
-        items.add(IntroItem("1Hot Dogs",
+        items.add(
+            IntroItem("1Hot Dogs",
             "It will harm your health",
-            R.drawable.img1))
+            R.drawable.img1
+            )
+        )
         items.add(
             IntroItem(
                 "2Fast Delivery",
@@ -63,9 +72,12 @@ class IntroFragment : Fragment(R.layout.fragment_intro) {
                 R.drawable.img2
             )
         )
-        items.add(IntroItem("3Easy Payment",
+        items.add(
+            IntroItem("3Easy Payment",
             "Pay!\nQuickly!!\nNow!!!",
-            R.drawable.img3))
+            R.drawable.img3
+            )
+        )
     }
 
     private fun initViews(view: View) {
@@ -106,6 +118,17 @@ class IntroFragment : Fragment(R.layout.fragment_intro) {
 
         buttonNext.setOnClickListener {
             viewPager.currentItem = (++position)
+        }
+
+        buttonEnable.setOnClickListener() {
+            viewModel.setIntroFinished(true)
+
+            val loginFragment = LoginFragment.newInstance()
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.frame_layout, loginFragment)
+                .commit()
+
         }
     }
 

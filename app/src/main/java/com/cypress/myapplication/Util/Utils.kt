@@ -2,6 +2,9 @@ package com.cypress.myapplication.Util
 
 import android.util.Patterns
 
+
+var introFinished: Boolean = false
+
 fun isEmailValid(email: String): Boolean{
 
     if (email.isEmpty()) return false
