@@ -15,6 +15,7 @@ class ViewPager2Adapter: RecyclerView.Adapter<ViewPager2Adapter.ViewHolder>() {
         override fun areItemsTheSame(oldItem: IntroItem, newItem: IntroItem): Boolean =
             oldItem.title == newItem.title
 
+
         override fun areContentsTheSame(oldItem: IntroItem, newItem: IntroItem): Boolean =
             oldItem.hashCode() == newItem.hashCode()
     }
@@ -23,6 +24,7 @@ class ViewPager2Adapter: RecyclerView.Adapter<ViewPager2Adapter.ViewHolder>() {
     var items: MutableList<IntroItem>
         set(value) = differ.submitList(value)
         get() = differ.currentList
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)

@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import com.cypress.myapplication.NewActivity
 import com.cypress.myapplication.R
 import com.cypress.myapplication.databinding.ActivityMainBinding
-import com.cypress.myapplication.fragment_intro.IntroFragment
-import com.cypress.myapplication.fragment_login.LoginFragment
+import com.cypress.myapplication.fragments.intro.IntroFragment
+import com.cypress.myapplication.fragments.login.LoginFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
     private fun commitFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.frame_layout, fragment)
+            .replace(R.id.frame_layout_main, fragment)
             .commit()
     }
 

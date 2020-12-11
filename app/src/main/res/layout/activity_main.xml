@@ -8,9 +8,7 @@
 
 
         <FrameLayout
-            android:id="@+id/frame_layout"
-            android:tag="my_tag"
-            android:name="com/cypress/myapplication/BlankFragment.kt"
+            android:id="@+id/frame_layout_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
