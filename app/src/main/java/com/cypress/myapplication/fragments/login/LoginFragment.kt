@@ -8,7 +8,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import com.cypress.myapplication.R
-import com.cypress.myapplication.Util.isEmailValid
+import com.cypress.myapplication.util.isEmailValid
 import com.cypress.myapplication.databinding.FragmentLoginBinding
 import com.cypress.myapplication.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel

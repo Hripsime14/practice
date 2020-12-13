@@ -15,7 +15,7 @@ import com.cypress.myapplication.R
 import com.cypress.myapplication.Status
 import com.cypress.myapplication.backend.UserEntity
 import com.cypress.myapplication.databinding.FragmentUsersBinding
-import com.cypress.myapplication.fragments.users.adapters.UsersAdapter
+import com.cypress.myapplication.fragments.adapters.UsersAdapter
 import com.cypress.myapplication.fragments.users.albums.AlbumsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -58,7 +58,7 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
         viewModel.liveData.observe(viewLifecycleOwner) {
             when(it.status) {
                 Status.SUCCESS -> Unit
-                Status.LODAING-> {}
+                Status.LOADING-> {}
                 Status.ERROR -> {
                     Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                 }

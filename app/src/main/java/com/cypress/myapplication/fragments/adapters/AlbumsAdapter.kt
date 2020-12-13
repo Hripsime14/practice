@@ -1,4 +1,4 @@
-package com.cypress.myapplication.fragments.users.adapters
+package com.cypress.myapplication.fragments.adapters
 
 import android.util.Log
 import android.view.LayoutInflater

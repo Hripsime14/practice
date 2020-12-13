@@ -8,9 +8,9 @@
             android:icon="@drawable/image_placeholder"
             android:title="Users" />
         <item
-            android:id="@+id/page1Fragment"
+            android:id="@+id/contactsFragment"
             android:icon="@drawable/image_placeholder"
-            android:title="Page1" />
+            android:title="Contacts" />
 
         <item
             android:id="@+id/page2Fragment"

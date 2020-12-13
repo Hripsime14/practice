@@ -32,7 +32,7 @@ class UsersViewModel(private val repo: UsersDataRepo) : ViewModel() {
 
     private suspend fun makeApiCall() {
         withContext(Dispatchers.IO) {
-            _liveData.postValue(Resource(Status.LODAING, null, null))
+            _liveData.postValue(Resource(Status.LOADING, null, null))
 
             try {
                 val list = mutableListOf<UserEntity>()
@@ -43,7 +43,9 @@ class UsersViewModel(private val repo: UsersDataRepo) : ViewModel() {
                 repo.setUsersDB(list.toList())
 
             } catch (t: Throwable) {
-                _liveData.value = Resource(Status.ERROR, null, t.message)
+                withContext(Dispatchers.Main) {
+                    _liveData.value = Resource(Status.ERROR, null, t.message)
+                }
             }
         }
     }

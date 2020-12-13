@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.cypress.myapplication.databinding.ActivityNewBinding
+import com.cypress.myapplication.fragments.contacts.ContactsFragment
 import com.cypress.myapplication.fragments.users.UsersFragment
 import kotlinx.android.synthetic.main.activity_new.*
 
@@ -28,6 +29,7 @@ class NewActivity : AppCompatActivity() {
         toggle.syncState()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setTitle("Users") // TODO: check why not changing the title
 
         navView.setNavigationItemSelectedListener {
 
@@ -37,9 +39,9 @@ class NewActivity : AppCompatActivity() {
                     setTitle("Users")
                     drawerLayout.close()
                 }
-                R.id.page1Fragment -> {
-                    replaceFragment(Page1Fragment.newInstance())
-                    setTitle("Page1")
+                R.id.contactsFragment -> {
+                    replaceFragment(ContactsFragment.newInstance())
+                    setTitle("Contacts")
                     drawerLayout.close()
                 }
                 R.id.page2Fragment -> {
@@ -52,11 +54,17 @@ class NewActivity : AppCompatActivity() {
         }
 
         replaceFragment(UsersFragment.newInstance())
-        setTitle("Users") // TODO: check why not changing the title
+
     }
 
     private fun setTitle(title: String) {
         binding.toolbar.title = title
+        supportActionBar?.title = title
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        setTitle("Users")
     }
 
     override fun onSupportNavigateUp(): Boolean {

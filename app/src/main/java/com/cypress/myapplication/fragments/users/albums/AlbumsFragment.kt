@@ -2,19 +2,19 @@ package com.cypress.myapplication.fragments.users.albums
 
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.cypress.myapplication.NewActivity
 import com.cypress.myapplication.R
 import com.cypress.myapplication.Status
 import com.cypress.myapplication.backend.AlbumEntity
 import com.cypress.myapplication.backend.PhotoEntity
 import com.cypress.myapplication.databinding.FragmentAlbumsBinding
-import com.cypress.myapplication.fragments.users.adapters.AlbumsAdapter
+import com.cypress.myapplication.fragments.adapters.AlbumsAdapter
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
@@ -44,8 +44,14 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
         binding = FragmentAlbumsBinding.bind(view)
         list = binding.albumsList
         swipeRefreshLayout = binding.albumsSwipe
+        setActionBarTitle()
+
         observeData() //TODO: When I go forward & backward fast - the view updating "not easily"
         setListeners()
+    }
+
+    private fun setActionBarTitle() {
+        (activity as NewActivity).supportActionBar?.title = "Albums"
     }
 
     private fun setListeners() {
@@ -84,7 +90,7 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
         viewModel?.liveData?.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> Unit
-                Status.LODAING -> {}
+                Status.LOADING -> {}
                 Status.ERROR -> {
                     Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                 }
@@ -94,7 +100,7 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
         viewModel?.photoLiveData?.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> Unit
-                Status.LODAING -> {}
+                Status.LOADING -> {}
                 Status.ERROR -> {
                     Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                 }

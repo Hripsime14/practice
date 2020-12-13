@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.cypress.myapplication.backend.UserDatabase
 import com.cypress.myapplication.constants.USER_DB
+import com.cypress.myapplication.fragments.contacts.ContactLocalDataSource
 import com.cypress.myapplication.fragments.intro.IntroDataRepo
 import com.cypress.myapplication.fragments.intro.IntroLocalDataSource
 import com.cypress.myapplication.fragments.login.LoginDataRepo
@@ -14,6 +15,7 @@ import com.cypress.myapplication.fragments.users.UsersLocalDataSource
 import com.cypress.myapplication.fragments.users.albums.AlbumsLocalDataSource
 import com.cypress.myapplication.main.MainDataRepo
 import com.cypress.myapplication.main.MainLocalDataSource
+import com.cypress.myapplication.manager.ContactManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -79,5 +81,13 @@ val localDataModule = module {
 
     single {
         PhotoRemoteDataSource(get())
+    }
+
+    single {
+        ContactManager()
+    }
+
+    single {
+        ContactLocalDataSource(get())
     }
 }

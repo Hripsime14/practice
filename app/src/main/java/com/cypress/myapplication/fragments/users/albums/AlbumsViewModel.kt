@@ -40,7 +40,7 @@ class AlbumsViewModel(userId: Int, private val repo: AlbumsDataRepo, private val
 
     private suspend fun makeApiCall(id: Int) {
         withContext(Dispatchers.IO) {
-            _liveData.postValue(Resource(Status.LODAING, null, null))
+            _liveData.postValue(Resource(Status.LOADING, null, null))
             try {
                 val list = mutableListOf<AlbumEntity>()
                 val result = repo.getRemoteAlbums(id)
@@ -63,7 +63,7 @@ class AlbumsViewModel(userId: Int, private val repo: AlbumsDataRepo, private val
     }
 
     private suspend fun makeApiCallPhotos(id: Int) {
-        _photoLiveData.postValue(Resource(Status.LODAING, null, null))
+        _photoLiveData.postValue(Resource(Status.LOADING, null, null))
         try {
             val result = photoRepo.getRemotePhotos(id)
 

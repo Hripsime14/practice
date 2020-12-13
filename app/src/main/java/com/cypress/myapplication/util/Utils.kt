@@ -1,4 +1,4 @@
-package com.cypress.myapplication.Util
+package com.cypress.myapplication.util
 
 import android.util.Patterns
 
