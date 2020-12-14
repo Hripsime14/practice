@@ -13,6 +13,7 @@ class ContactManager {
     fun getLiveData(): LiveData<List<ContactItem>> = _liveData
 
     fun readContacts(activity: Activity) {
+        contacts.clear()
 
         val phoneCols = listOf(
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,

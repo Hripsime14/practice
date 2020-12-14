@@ -1,6 +1,5 @@
 package com.cypress.myapplication.fragments.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +12,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.cypress.myapplication.R
+import com.cypress.myapplication.backend.UserEntity
 import com.cypress.myapplication.modeldatas.model.ContactItem
-import java.lang.System.load
 
 class ContactsAdapter: RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>() {
-    private lateinit var ctx: Context //TODO: is this a terrible idea?
+
+    private lateinit var onItemClickListener: (ContactItem) -> Unit
+
+    fun setOnItemClickListener(contactItem: (ContactItem) -> Unit) {
+        this.onItemClickListener = contactItem
+    }
+
     private val diffCallBackPhotos = object : DiffUtil.ItemCallback<ContactItem>() {
         override fun areItemsTheSame(oldItem: ContactItem, newItem: ContactItem): Boolean =
             oldItem == newItem
@@ -32,17 +37,25 @@ class ContactsAdapter: RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>(
         set(value) {
             differPhotos.submitList(value)
         }
-        get() = differPhotos.currentList
+        get() = differPhotos.currentList.toMutableList()
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsViewHolder {
-        ctx = parent.context
-        return ContactsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.contacts_single_item, parent, false))
+        val view: View =  LayoutInflater.from(parent.context).inflate(R.layout.contacts_single_item, parent, false)
+        val viewHolder = ContactsViewHolder(view)
+        view.setOnClickListener {
+            onItemClickListener.invoke(contactItems[viewHolder.adapterPosition])
+        }
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: ContactsViewHolder, position: Int) {
         holder.bind()
+    }
+
+    fun deleteItem(position: Int) {
+        contactItems.removeAt(position)
     }
 
     override fun getItemCount(): Int = contactItems.size
@@ -57,7 +70,7 @@ class ContactsAdapter: RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>(
             name.text = contactItems[adapterPosition].fullName
             photo = itemView.findViewById(R.id.contactImage)
             if (contactItems[adapterPosition].photo != "") {
-                Glide.with(ctx).load(contactItems[adapterPosition].photo.toUri())
+                Glide.with(itemView.context).load(contactItems[adapterPosition].photo.toUri())
                     .apply(RequestOptions.circleCropTransform()).into(photo)
             }
                 photo.setBackgroundResource(R.drawable.cyrcle_border)

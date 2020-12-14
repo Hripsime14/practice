@@ -1,5 +1,6 @@
 package com.cypress.myapplication
 
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -17,6 +18,12 @@ class NewActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var binding: ActivityNewBinding
+    private lateinit var isGranted :(Boolean) -> Unit
+
+    fun setIsGranted(isGranted:(Boolean) -> Unit) {
+        this.isGranted = isGranted
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNewBinding.inflate(layoutInflater)
@@ -29,7 +36,7 @@ class NewActivity : AppCompatActivity() {
         toggle.syncState()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        setTitle("Users") // TODO: check why not changing the title
+        setTitle("Users")
 
         navView.setNavigationItemSelectedListener {
 
@@ -73,7 +80,7 @@ class NewActivity : AppCompatActivity() {
     }
 
 
-    private fun replaceFragment(fragment: Fragment) {
+    fun replaceFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fid, fragment)
@@ -95,5 +102,14 @@ class NewActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        isGranted.invoke(requestCode == 111 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
     }
 }
