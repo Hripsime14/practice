@@ -9,6 +9,7 @@ import com.cypress.myapplication.fragments.intro.IntroDataRepo
 import com.cypress.myapplication.fragments.intro.IntroLocalDataSource
 import com.cypress.myapplication.fragments.login.LoginDataRepo
 import com.cypress.myapplication.fragments.login.LoginLocalDataSource
+import com.cypress.myapplication.fragments.media.MediaLocalDataSource
 import com.cypress.myapplication.fragments.photos.PhotoLocalDataSource
 import com.cypress.myapplication.fragments.photos.PhotoRemoteDataSource
 import com.cypress.myapplication.fragments.users.UsersLocalDataSource
@@ -16,6 +17,7 @@ import com.cypress.myapplication.fragments.users.albums.AlbumsLocalDataSource
 import com.cypress.myapplication.main.MainDataRepo
 import com.cypress.myapplication.main.MainLocalDataSource
 import com.cypress.myapplication.manager.ContactManager
+import com.cypress.myapplication.manager.MediaManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -89,5 +91,13 @@ val localDataModule = module {
 
     single {
         ContactLocalDataSource(get())
+    }
+
+    single {
+        MediaManager()
+    }
+
+    single {
+        MediaLocalDataSource(get())
     }
 }

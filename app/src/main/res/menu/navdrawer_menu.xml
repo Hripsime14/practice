@@ -5,17 +5,17 @@
 
         <item
             android:id="@+id/usersFragment"
-            android:icon="@drawable/image_placeholder"
+            android:icon="@drawable/users"
             android:title="Users" />
         <item
             android:id="@+id/contactsFragment"
-            android:icon="@drawable/image_placeholder"
+            android:icon="@drawable/phone"
             android:title="Contacts" />
 
         <item
-            android:id="@+id/page2Fragment"
-            android:icon="@android:drawable/btn_star"
-            android:title="Page2" />
+            android:id="@+id/mediaFragment"
+            android:icon="@drawable/image_placeholder"
+            android:title="Media" />
     </group>
 
 

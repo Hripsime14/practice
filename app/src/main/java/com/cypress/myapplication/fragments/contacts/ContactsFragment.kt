@@ -24,6 +24,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class ContactsFragment : Fragment(R.layout.fragment_contacts) {
     private lateinit var recyclerView: RecyclerView
     private val viewModel: ContactViewModel by viewModel()
+    private lateinit var list: MutableList<ContactItem>
+    private var pos = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,16 +35,32 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as NewActivity).setTitle("Contacts")
         setHasOptionsMenu(true)
         bindViews(view)
-        (activity as NewActivity).setIsGranted { if(it) getContacts()}
+        (activity as NewActivity).setIsContactPermGranted {
+            if(it) {
+                getContacts()
+            } else {
+                (activity as NewActivity).supportFragmentManager.popBackStack()
+            }
+        }
         viewModel.getLiveData().observe(viewLifecycleOwner) {
+            list = it as MutableList<ContactItem>
             createList(it)
         }
         getContacts()
+
+
+        (activity as NewActivity).setOnUpdatedContact(object : NewActivity.OnUpdateContact {
+            override fun onUpdateContact(contact: ContactItem) {
+                list[pos] = contact
+                createList(list)
+            }
+        })
     }
 
-    private fun getContacts(){
+    private fun  getContacts(){
         if (context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.READ_CONTACTS) } != PackageManager.PERMISSION_GRANTED) {
             activity?.let { ActivityCompat.requestPermissions(it, Array(1) {Manifest.permission.READ_CONTACTS}, 111) }
         } else activity?.let { viewModel.getContacts(it) }
@@ -57,6 +75,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         val adapter = ContactsAdapter()
         adapter.setOnItemClickListener {
             openDetailsFragment(it)
+            pos = list.indexOf(it)
         }
         val lm = LinearLayoutManager(context)
         lm.orientation = LinearLayoutManager.VERTICAL
@@ -81,6 +100,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
+
     companion object {
         @JvmStatic
         fun newInstance() =
@@ -89,4 +109,5 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                 }
             }
     }
+
 }

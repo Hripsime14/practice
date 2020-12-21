@@ -47,6 +47,7 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as NewActivity).setTitle("Users")
         binding = FragmentUsersBinding.bind(view)
         list = binding.usersList
         swipeRefreshLayout = binding.usersSwipe

@@ -3,6 +3,7 @@ package com.cypress.myapplication
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
@@ -11,17 +12,26 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.cypress.myapplication.databinding.ActivityNewBinding
 import com.cypress.myapplication.fragments.contacts.ContactsFragment
+import com.cypress.myapplication.fragments.media.MediaFragment
 import com.cypress.myapplication.fragments.users.UsersFragment
+import com.cypress.myapplication.modeldatas.model.ContactItem
+import com.cypress.myapplication.services.OPEN_MEDIA_ACTION
 import kotlinx.android.synthetic.main.activity_new.*
 
 class NewActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var binding: ActivityNewBinding
-    private lateinit var isGranted :(Boolean) -> Unit
+    private lateinit var isContactsPermGranted :(Boolean) -> Unit
+    private lateinit var isMediasPermGranted :(Boolean) -> Unit
+//                        private lateinit var  : (contact: ContactItem) ->Unit
 
-    fun setIsGranted(isGranted:(Boolean) -> Unit) {
-        this.isGranted = isGranted
+    fun setIsContactPermGranted(isGranted:(Boolean) -> Unit) {
+        this.isContactsPermGranted = isGranted
+    }
+
+    fun setIsMediaPermGranted(isGranted:(Boolean) -> Unit) {
+        this.isMediasPermGranted = isGranted
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,28 +53,32 @@ class NewActivity : AppCompatActivity() {
             when(it.itemId) {
                 R.id.usersFragment -> {
                     replaceFragment(UsersFragment.newInstance())
-                    setTitle("Users")
                     drawerLayout.close()
                 }
                 R.id.contactsFragment -> {
                     replaceFragment(ContactsFragment.newInstance())
-                    setTitle("Contacts")
                     drawerLayout.close()
                 }
-                R.id.page2Fragment -> {
-                    replaceFragment(Page2Fragment.newInstance())
-                    setTitle("Page2")
+                R.id.mediaFragment -> {
+                    if(supportFragmentManager.findFragmentById(R.id.fid) !is MediaFragment) {
+                            replaceFragment(MediaFragment.newInstance())
+                    }
                     drawerLayout.close()
                 }
             }
             true
         }
 
-        replaceFragment(UsersFragment.newInstance())
+        if (intent.action != null && intent.action == OPEN_MEDIA_ACTION) {
+            replaceFragment(MediaFragment.newInstance())
+        }
+        else {
+            replaceFragment(UsersFragment.newInstance())
+        }
 
     }
 
-    private fun setTitle(title: String) {
+    fun setTitle(title: String) {
         binding.toolbar.title = title
         supportActionBar?.title = title
     }
@@ -72,11 +86,6 @@ class NewActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         setTitle("Users")
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = this.findNavController(R.id.myNavHostFragment)
-        return NavigationUI.navigateUp(navController, drawerLayout)
     }
 
 
@@ -110,6 +119,26 @@ class NewActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        isGranted.invoke(requestCode == 111 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        if (requestCode == 111) {
+            isContactsPermGranted.invoke(grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        }
+        else if (requestCode == 222) {
+            isMediasPermGranted.invoke(grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        }
     }
+
+    fun setUpdatedContact(contact: ContactItem) {
+        Log.d("zzzzzz", "setUpdatedContact: ${contact.fullName}")
+        onUpdateContact.onUpdateContact(contact)
+    }
+
+    interface OnUpdateContact {
+        fun onUpdateContact(contact: ContactItem)
+    }
+
+    fun setOnUpdatedContact(onUpdateContact: OnUpdateContact) {
+        this.onUpdateContact = onUpdateContact
+    }
+    lateinit var onUpdateContact: OnUpdateContact
+
 }

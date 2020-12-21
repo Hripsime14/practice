@@ -25,7 +25,7 @@ class ContactsAdapter: RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>(
 
     private val diffCallBackPhotos = object : DiffUtil.ItemCallback<ContactItem>() {
         override fun areItemsTheSame(oldItem: ContactItem, newItem: ContactItem): Boolean =
-            oldItem == newItem
+            oldItem.fullName == newItem.fullName
 
 
         override fun areContentsTheSame(oldItem: ContactItem, newItem: ContactItem): Boolean =

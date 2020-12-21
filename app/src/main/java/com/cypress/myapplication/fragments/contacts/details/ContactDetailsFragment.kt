@@ -1,10 +1,14 @@
 package com.cypress.myapplication.fragments.contacts.details
 
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import com.cypress.myapplication.NewActivity
 import com.cypress.myapplication.R
 import com.cypress.myapplication.databinding.FragmentContactDetailsBinding
 import com.cypress.myapplication.modeldatas.model.ContactItem
@@ -30,6 +34,7 @@ class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details) {
         setHasOptionsMenu(true)
         binding = FragmentContactDetailsBinding.bind(view)
         bindViews()
+        setValues()
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -40,6 +45,13 @@ class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details) {
         phone = binding.phone
         email = binding.email
     }
+
+    private fun setValues() {
+        fName.setText(contactItem?.fullName)
+        phone.setText(contactItem?.photo)
+        email.setText(contactItem?.email)
+    }
+
 
     //I pursue experimental options=)
     private fun makeFocusable(flag: String) {
@@ -70,6 +82,7 @@ class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details) {
             menu.getItem(0).isVisible = true
             menu.getItem(1).isVisible = false
             makeFocusable("false")
+            contactItem = ContactItem(fName.text.toString(), phone.text.toString(), "", email.text.toString())
             true
         }
         else -> { super.onOptionsItemSelected(item) }
@@ -84,5 +97,11 @@ class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details) {
                     putParcelable(CONTACT_KEY, contactItem)
                 }
             }
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        contactItem?.let { (activity as NewActivity).setUpdatedContact(it) }
     }
 }

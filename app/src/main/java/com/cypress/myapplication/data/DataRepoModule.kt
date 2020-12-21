@@ -1,6 +1,7 @@
 package com.cypress.myapplication.data
 
 import com.cypress.myapplication.fragments.contacts.ContactDataRepo
+import com.cypress.myapplication.fragments.media.MediaDataRepo
 import com.cypress.myapplication.fragments.photos.PhotoDataRepo
 import com.cypress.myapplication.fragments.users.UsersDataRepo
 import com.cypress.myapplication.fragments.users.albums.AlbumsDataRepo
@@ -27,5 +28,11 @@ val photosRepoModule = module {
 val contactRepoModule = module {
     single {
         ContactDataRepo(get())
+    }
+}
+
+val mediaRepoModule = module {
+    single {
+        MediaDataRepo(get())
     }
 }

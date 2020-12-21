@@ -6,6 +6,7 @@ import com.cypress.myapplication.data.*
 import com.cypress.myapplication.fragments.contacts.di.contactViewModelModule
 import com.cypress.myapplication.fragments.intro.di.introViewModelModule
 import com.cypress.myapplication.fragments.login.di.loginViewModelModule
+import com.cypress.myapplication.fragments.media.di.mediaViewModelModule
 import com.cypress.myapplication.fragments.users.albums.di.albumsViewModel
 import com.cypress.myapplication.fragments.users.di.usersViewModelModule
 import com.cypress.myapplication.main.di.mainViewModelModule
@@ -29,7 +30,9 @@ class App: Application() {
                 albumsViewModel,
                 photosRepoModule,
                 contactViewModelModule,
-                contactRepoModule
+                contactRepoModule,
+                mediaViewModelModule,
+                mediaRepoModule
             ))
         }
     }
