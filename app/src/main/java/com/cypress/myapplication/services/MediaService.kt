@@ -222,19 +222,20 @@ class MediaService: Service(), OnAudioFocusChangeListener{
     override fun onAudioFocusChange(focusChange: Int) {
         Log.d("fffff0", "onAudioFocusChange: dfgdfg")
         when (focusChange) {
-            AUDIOFOCUS_GAIN ->     //ThefocusChange { service gained audio focus, so it needs to start playing.
+            AUDIOFOCUS_GAIN ->     //ThefocusChange service gained audio focus, so it needs to start playing.
                 if (!mediaPlayer.isPlaying) {
                     Log.d("ffffffffffffff", "onAudioFocusChange: ffff")
                     resume()
                     showNotification(PLAY_ACTION)
-                    sendBroadcast(PLAY_ACTION)
+                    sendBroadcast(NOTIFICATION_PAUSE_ACTION)
                 }
             AUDIOFOCUS_LOSS ->     // The service lost audio focus, the user probably moved to playing media on another app.
                 if (mediaPlayer.isPlaying) {
                     Log.d("ffffffffffffff1", "onAudioFocusChange: ffff")
                     pause()
+                    makePlayVisible()
                     showNotification(PAUSE_ACTION)
-                    sendBroadcast(PAUSE_ACTION)
+                    sendBroadcast(NOTIFICATION_PAUSE_ACTION)
                 }
             AUDIOFOCUS_LOSS_TRANSIENT ->     //Fucos lost for a short time, pause the MediaPlayer.
                 if (mediaPlayer.isPlaying) {
