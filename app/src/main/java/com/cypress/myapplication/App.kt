@@ -9,7 +9,7 @@ import com.cypress.myapplication.fragments.login.di.loginViewModelModule
 import com.cypress.myapplication.fragments.media.di.mediaViewModelModule
 import com.cypress.myapplication.fragments.users.albums.di.albumsViewModel
 import com.cypress.myapplication.fragments.users.di.usersViewModelModule
-import com.cypress.myapplication.main.di.mainViewModelModule
+import com.cypress.myapplication.activities.main.di.mainViewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -21,6 +21,9 @@ class App: Application() {
             modules(listOf(
                 createRemoteModule(baseUrl),
                 localDataModule,
+                introRepoModule,
+                loginRepoModule,
+                mainRepoModule,
                 usersRepoModule,
                 mainViewModelModule,
                 usersViewModelModule,

@@ -1,4 +1,4 @@
-package com.cypress.myapplication.main
+package com.cypress.myapplication.activities.main
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
-import com.cypress.myapplication.NewActivity
 import com.cypress.myapplication.R
+import com.cypress.myapplication.activities.PracticeActivity
 import com.cypress.myapplication.databinding.ActivityMainBinding
 import com.cypress.myapplication.fragments.intro.IntroFragment
 import com.cypress.myapplication.fragments.login.LoginFragment
@@ -25,25 +25,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         hideActionBar()
         start()
-
     }
 
     private fun start() {
         if (viewModel.getIntroFinished() && viewModel.getLoginFinished()) {
             openActivity()
         } else if (!viewModel.getIntroFinished()) {
-            commitFragment(IntroFragment.newInstance())
+            openFragment(IntroFragment.newInstance())
         } else {
-            commitFragment(LoginFragment.newInstance())
+            openFragment(LoginFragment.newInstance())
         }
     }
 
     fun openActivity() {
-        startActivity(Intent(this, NewActivity::class.java))
+        startActivity(Intent(this, PracticeActivity::class.java))
         finish()
     }
 
-    private fun commitFragment(fragment: Fragment) {
+    private fun openFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.frame_layout_main, fragment)

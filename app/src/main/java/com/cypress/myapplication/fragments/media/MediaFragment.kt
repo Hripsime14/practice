@@ -14,15 +14,16 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.cypress.myapplication.NewActivity
+import com.cypress.myapplication.activities.PracticeActivity
 import com.cypress.myapplication.R
-import com.cypress.myapplication.constants.*
+import com.cypress.myapplication.constants.NOTIFICATION_PAUSE_ACTION
+import com.cypress.myapplication.constants.NOTIFICATION_PLAY_ACTION
+import com.cypress.myapplication.constants.NOTIFICATION_SNOOZE_ACTION
 import com.cypress.myapplication.databinding.FragmentMediaBinding
 import com.cypress.myapplication.fragments.adapters.MediaAdapter
 import com.cypress.myapplication.modeldatas.model.MediaItem
 import com.cypress.myapplication.services.KEY
 import com.cypress.myapplication.services.MediaService
-import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MediaFragment : Fragment(R.layout.fragment_media) {
@@ -44,29 +45,28 @@ class MediaFragment : Fragment(R.layout.fragment_media) {
         addIntentFilterActions(intentFilter)
 
         activity?.registerReceiver(broadcast, intentFilter)
-        arguments?.let {
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as NewActivity).setTitle("Media")
+        (activity as PracticeActivity).setTitle("Media")
 
-        setHasOptionsMenu(true)
         bindViews(view)
 
-        (activity as NewActivity).setIsMediaPermGranted {
+        (activity as PracticeActivity).setIsMediaPermGranted {
+            Log.d("zzzzz0", "onViewCreated: ")
             if(it) {
-            getMedias()
+                Log.d("zzzzz1", "onViewCreated: ")
+                getPermission()
             } else {
-                (activity as NewActivity).supportFragmentManager.popBackStack()
+                (activity as PracticeActivity).supportFragmentManager.popBackStack()
             }
         }
 
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             createList(it)
         }
-        getMedias() //QUESTION: why do we call this function here?
+        getPermission()
 
     }
 
@@ -92,25 +92,30 @@ class MediaFragment : Fragment(R.layout.fragment_media) {
             putExtra(KEY, mediaItem)
         }
 
-        (activity as NewActivity).startService(intent)
+        (activity as PracticeActivity).startService(intent)
     }
 
     private fun startService(action: String) {
         val intent = Intent(requireContext(), MediaService::class.java).apply {
             this.action = action
         }
-        (activity as NewActivity).startService(intent)
+        (activity as PracticeActivity).startService(intent)
     }
 
-
-    private fun getMedias() {
+    private fun getPermission() {
         if (context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.READ_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED) {
             activity?.let { ActivityCompat.requestPermissions(it, Array(1) { Manifest.permission.READ_EXTERNAL_STORAGE}, 222) }
-        } else activity?.let {viewModel.getMedias(it) }
+        } else getMedias()
+    }
+
+    private fun getMedias() {
+        activity?.let {viewModel.getMedias(it) }
     }
 
     private fun createList(list: List<MediaItem>) {
         adapter = MediaAdapter()
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
         adapter.setOnItemClickListener { mediaItem, action ->
             startService(mediaItem, action)
@@ -119,11 +124,6 @@ class MediaFragment : Fragment(R.layout.fragment_media) {
         adapter.setOnPPClickListener {
             startService(it)
         }
-
-        val lm = LinearLayoutManager(context)
-        lm.orientation = LinearLayoutManager.VERTICAL
-        recyclerView.layoutManager = lm
-        recyclerView.adapter = adapter
 
         if (isMyServiceRunning(MediaService::class.java.name)) {
             val mediaItem = MediaService.curMedia

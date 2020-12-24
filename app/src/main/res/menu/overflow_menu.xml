@@ -13,5 +13,5 @@
         android:title=""
         android:visible="false"
         android:icon="@drawable/save"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

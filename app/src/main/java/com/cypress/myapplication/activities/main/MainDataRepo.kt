@@ -1,4 +1,4 @@
-package com.cypress.myapplication.main
+package com.cypress.myapplication.activities.main
 
 class MainDataRepo(private val localDataSource: MainLocalDataSource) {
 

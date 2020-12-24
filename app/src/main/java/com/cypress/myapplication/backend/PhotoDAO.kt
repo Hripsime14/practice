@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.cypress.myapplication.constants.PHOTO_DB
-import com.cypress.myapplication.constants.USER_DB
 
 @Dao
 interface PhotoDAO {

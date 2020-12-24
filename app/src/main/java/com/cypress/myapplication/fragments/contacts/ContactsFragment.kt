@@ -4,14 +4,13 @@ package com.cypress.myapplication.fragments.contacts
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.cypress.myapplication.NewActivity
+import com.cypress.myapplication.activities.PracticeActivity
 import com.cypress.myapplication.R
 import com.cypress.myapplication.databinding.FragmentContactsBinding
 import com.cypress.myapplication.fragments.adapters.ContactsAdapter
@@ -35,14 +34,14 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as NewActivity).setTitle("Contacts")
+        (activity as PracticeActivity).setTitle("Contacts")
         setHasOptionsMenu(true)
         bindViews(view)
-        (activity as NewActivity).setIsContactPermGranted {
+        (activity as PracticeActivity).setIsContactPermGranted {
             if(it) {
                 getContacts()
             } else {
-                (activity as NewActivity).supportFragmentManager.popBackStack()
+                (activity as PracticeActivity).supportFragmentManager.popBackStack()
             }
         }
         viewModel.getLiveData().observe(viewLifecycleOwner) {
@@ -52,7 +51,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         getContacts()
 
 
-        (activity as NewActivity).setOnUpdatedContact(object : NewActivity.OnUpdateContact {
+        (activity as PracticeActivity).setOnUpdatedContact(object : PracticeActivity.OnUpdateContact {
             override fun onUpdateContact(contact: ContactItem) {
                 list[pos] = contact
                 createList(list)
@@ -86,14 +85,15 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
     }
 
     private fun openDetailsFragment(contactItem: ContactItem) {
-        (activity as NewActivity).replaceFragment(ContactDetailsFragment.newInstance(contactItem))
+        (activity as PracticeActivity).replaceFragment(ContactDetailsFragment.newInstance(contactItem))
     }
 
     private fun implementSwipe(adapter: ContactsAdapter) {
         val item = object: SwipeToDelete(context, 0, ItemTouchHelper.LEFT) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                Log.d("ooo", "onSwiped: ${viewHolder.adapterPosition}")
-                adapter.deleteItem(viewHolder.adapterPosition)
+                list.removeAt(viewHolder.adapterPosition)
+                adapter.contactItems = list
+                adapter.notifyDataSetChanged()
             }
         }
         val itemTouchHelper = ItemTouchHelper(item)
@@ -109,5 +109,4 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                 }
             }
     }
-
 }

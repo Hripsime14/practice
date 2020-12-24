@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="Full Name"
+        android:text="@string/full_name"
         app:layout_constraintBottom_toBottomOf="@+id/contactImage"
         app:layout_constraintStart_toEndOf="@+id/contactImage"
         app:layout_constraintTop_toTopOf="@+id/contactImage" />

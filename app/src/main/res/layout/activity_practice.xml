@@ -5,7 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewActivity">
+    tools:context=".activities.PracticeActivity">
 
 
     <LinearLayout
@@ -30,7 +30,6 @@
         </com.google.android.material.appbar.AppBarLayout>
 
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/new_constr"
             android:layout_width="match_parent"
@@ -43,7 +42,6 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </LinearLayout>
 
 

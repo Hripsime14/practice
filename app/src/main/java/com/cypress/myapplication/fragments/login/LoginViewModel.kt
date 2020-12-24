@@ -4,5 +4,5 @@ import androidx.lifecycle.ViewModel
 
 class LoginViewModel(private val loginDataRepo: LoginDataRepo): ViewModel() {
 
-      fun setLoginFinished(isLoginFinished: Boolean) = loginDataRepo.setLoginFinished(isLoginFinished)
+      fun setLoginFinished() = loginDataRepo.setLoginFinished()
 }

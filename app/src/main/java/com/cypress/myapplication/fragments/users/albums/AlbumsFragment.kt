@@ -2,13 +2,14 @@ package com.cypress.myapplication.fragments.users.albums
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.cypress.myapplication.NewActivity
+import com.cypress.myapplication.activities.PracticeActivity
 import com.cypress.myapplication.R
 import com.cypress.myapplication.Status
 import com.cypress.myapplication.backend.AlbumEntity
@@ -46,24 +47,12 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
         swipeRefreshLayout = binding.albumsSwipe
         setActionBarTitle()
 
-        observeData() //TODO: When I go forward & backward fast - the view updating "not easily"
+        observeData()
         setListeners()
     }
 
     private fun setActionBarTitle() {
-        (activity as NewActivity).supportActionBar?.title = "Albums"
-    }
-
-    private fun setListeners() {
-        val handler = Handler()
-        var runnable: Runnable
-        swipeRefreshLayout.setOnRefreshListener {
-            runnable = Runnable {
-                observeData()
-                swipeRefreshLayout.isRefreshing = false
-            }
-            handler.postDelayed(runnable, 1500.toLong())
-        }
+        (activity as PracticeActivity).setTitle("Albums")
     }
 
     private fun observeData() {
@@ -74,7 +63,7 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
             }
         }
 
-        //photos TODO: check the map
+        //photos
         viewModel?.getLocalPhotos()?.observe(viewLifecycleOwner) {
             it?.let {
                 for(item in it)  {
@@ -87,7 +76,7 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
             }
         }
 
-        viewModel?.liveData?.observe(viewLifecycleOwner) {
+        viewModel?.albumsLiveData?.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> Unit
                 Status.LOADING -> {}
@@ -108,6 +97,19 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
         }
     }
 
+    private fun setListeners() {
+        val handler = Handler(Looper.getMainLooper())
+        var runnable: Runnable
+        swipeRefreshLayout.setOnRefreshListener {
+            runnable = Runnable {
+                map.clear()
+                viewModel?.clearPhotoList()
+                viewModel?.getAlbums(userId)
+                swipeRefreshLayout.isRefreshing = false
+            }
+            handler.postDelayed(runnable, 1500L)
+        }
+    }
 
     private fun createList() {
         adapter = AlbumsAdapter(map)
@@ -125,5 +127,10 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
                     putInt(USER_ID_KEY, userId)
                 }
             }
+    }
+
+    override fun onDestroyView() {
+        viewModel?.clearRoom()
+        super.onDestroyView()
     }
 }

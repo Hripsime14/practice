@@ -24,8 +24,8 @@ class UsersViewModel(private val repo: UsersDataRepo) : ViewModel() {
 
     fun getLocalUsers() = repo.getUsersDB()
 
-    private fun getUsers() {
-        viewModelScope.launch {
+    fun getUsers() {
+        viewModelScope.launch { //returns Job
             makeApiCall()
         }
     }
@@ -36,11 +36,11 @@ class UsersViewModel(private val repo: UsersDataRepo) : ViewModel() {
 
             try {
                 val list = mutableListOf<UserEntity>()
-                val result = repo.getUsers()
+                val result = repo.getUsers() //getting data from server
                 result.map {
                     list.add(UserEntity(it.id, it.email, it.username))
                 }
-                repo.setUsersDB(list.toList())
+                repo.setUsersDB(list.toList()) //saving data in local db
 
             } catch (t: Throwable) {
                 withContext(Dispatchers.Main) {

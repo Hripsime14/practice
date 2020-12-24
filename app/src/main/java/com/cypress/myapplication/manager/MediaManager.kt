@@ -58,7 +58,6 @@ class MediaManager {
 
         songResults?.close()
         videoResults?.close()
-        Log.d("ghgh", "readMedias: ${medias.size}")
         _liveData.value = medias
     }
 }

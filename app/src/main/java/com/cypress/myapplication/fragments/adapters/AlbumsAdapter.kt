@@ -1,6 +1,5 @@
 package com.cypress.myapplication.fragments.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,7 @@ import com.cypress.myapplication.backend.PhotoEntity
 
 class AlbumsAdapter(private val map: Map<Int, MutableList<PhotoEntity>>): RecyclerView.Adapter<AlbumsAdapter.AlbumsViewHolder>() {
 
-    private var tempPhotosList: MutableList<PhotoEntity> = mutableListOf()
+    private var photosList: MutableList<PhotoEntity> = mutableListOf()
     //albums
     private val diffCallBack = object : DiffUtil.ItemCallback<AlbumEntity>() {
         override fun areItemsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean =
@@ -42,9 +41,8 @@ class AlbumsAdapter(private val map: Map<Int, MutableList<PhotoEntity>>): Recycl
 
     override fun onBindViewHolder(holder: AlbumsViewHolder, position: Int) {
         if (map.containsKey(items[position].id)) {
-            tempPhotosList = map[items[position].id] ?: error("")
-            holder.bind(tempPhotosList, items[position])
-            Log.d("mnmnnmnmn", "onBindViewHolder: size= ${map.get(1)?.size}")
+            photosList = map[items[position].id] ?: error("")
+            holder.bind(photosList, items[position])
         }
     }
 
@@ -57,7 +55,7 @@ class AlbumsAdapter(private val map: Map<Int, MutableList<PhotoEntity>>): Recycl
         fun bind(photos: MutableList<PhotoEntity>, album: AlbumEntity) {
             photosList = itemView.findViewById(R.id.photosList)
             albumTitle = itemView.findViewById(R.id.albumName)
-            albumTitle.text = album.name
+            albumTitle.text = "Album ${album.id}"
             val photosAdapter = PhotosAdapter()
             photosList.adapter = photosAdapter
             photosList.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)

@@ -6,9 +6,9 @@ import android.view.View
 import android.widget.Button
 
 import androidx.viewpager2.widget.ViewPager2
-import com.cypress.myapplication.IntroItem
+import com.cypress.myapplication.modeldatas.model.IntroItem
 import com.cypress.myapplication.R
-import com.cypress.myapplication.ViewPager2Adapter
+import com.cypress.myapplication.fragments.adapters.ViewPager2Adapter
 import com.cypress.myapplication.databinding.FragmentIntroBinding
 import com.cypress.myapplication.fragments.login.LoginFragment
 import com.google.android.material.tabs.TabLayout
@@ -26,7 +26,7 @@ class IntroFragment : Fragment(R.layout.fragment_intro) {
     private lateinit var buttonEnable: Button
     private var position = 0
 
-    private var adapter2 = ViewPager2Adapter()
+    private var adapter = ViewPager2Adapter()
     private val items = mutableListOf<IntroItem>()
 
 
@@ -42,7 +42,7 @@ class IntroFragment : Fragment(R.layout.fragment_intro) {
         super.onViewCreated(view, savedInstanceState)
 
         initItems()
-        adapter2.items = items
+        adapter.items = items
         initViews(view)
         addViewPagerAdapter()
         addTabLayoutMediator()
@@ -60,20 +60,20 @@ class IntroFragment : Fragment(R.layout.fragment_intro) {
 
     private fun initItems() {
         items.add(
-            IntroItem("1Hot Dogs",
+            IntroItem("Hot Dogs",
             "It will harm your health",
             R.drawable.img1
             )
         )
         items.add(
             IntroItem(
-                "2Fast Delivery",
+                "Fast Delivery",
                 "But we will appreciate that you come and get",
                 R.drawable.img2
             )
         )
         items.add(
-            IntroItem("3Easy Payment",
+            IntroItem("Easy Payment",
             "Pay!\nQuickly!!\nNow!!!",
             R.drawable.img3
             )
@@ -82,14 +82,14 @@ class IntroFragment : Fragment(R.layout.fragment_intro) {
 
     private fun initViews(view: View) {
         binding = FragmentIntroBinding.bind(view)
-        viewPager = binding.viewPager2
+        viewPager = binding.viewPager
         tabLayout = binding.tabLayout
         buttonNext = binding.buttonNext
         buttonEnable = binding.buttonEnable
     }
 
     private fun addViewPagerAdapter() {
-        viewPager.adapter = adapter2
+        viewPager.adapter = adapter
     }
 
     private fun addTabLayoutMediator() {
@@ -117,19 +117,20 @@ class IntroFragment : Fragment(R.layout.fragment_intro) {
         })
 
         buttonNext.setOnClickListener {
-            viewPager.currentItem = (++position)
+            viewPager.currentItem = ++position
         }
 
-        buttonEnable.setOnClickListener() {
-            viewModel.setIntroFinished(true)
-
-            val loginFragment = LoginFragment.newInstance()
-            parentFragmentManager
-                .beginTransaction()
-                .replace(R.id.frame_layout_main, loginFragment)
-                .commit()
-
+        buttonEnable.setOnClickListener {
+            viewModel.setIntroFinished()
+            openLoginFragment()
         }
+    }
+
+    private fun openLoginFragment() {
+        parentFragmentManager
+            .beginTransaction()
+            .replace(R.id.frame_layout_main, LoginFragment.newInstance())
+            .commit()
     }
 
     private fun changeBtnVisibility(boolean: Boolean) {
@@ -138,6 +139,7 @@ class IntroFragment : Fragment(R.layout.fragment_intro) {
             button_enable.visibility = View.VISIBLE
         } else {
             button_enable.visibility = View.GONE
+            buttonNext.visibility = View.VISIBLE
         }
     }
 }

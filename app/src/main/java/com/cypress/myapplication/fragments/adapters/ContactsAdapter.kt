@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.cypress.myapplication.R
-import com.cypress.myapplication.backend.UserEntity
 import com.cypress.myapplication.modeldatas.model.ContactItem
 
 class ContactsAdapter: RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>() {
@@ -52,10 +51,6 @@ class ContactsAdapter: RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>(
 
     override fun onBindViewHolder(holder: ContactsViewHolder, position: Int) {
         holder.bind()
-    }
-
-    fun deleteItem(position: Int) {
-        contactItems.removeAt(position)
     }
 
     override fun getItemCount(): Int = contactItems.size

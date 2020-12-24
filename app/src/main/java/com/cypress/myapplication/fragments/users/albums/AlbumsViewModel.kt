@@ -1,5 +1,6 @@
 package com.cypress.myapplication.fragments.users.albums
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,16 +13,18 @@ import com.cypress.myapplication.fragments.photos.PhotoDataRepo
 import com.cypress.myapplication.modeldatas.model.AlbumItem
 import com.cypress.myapplication.modeldatas.model.PhotoItem
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AlbumsViewModel(userId: Int, private val repo: AlbumsDataRepo, private val photoRepo: PhotoDataRepo): ViewModel() {
+    private lateinit var job: Job
     private var collected = false
     private val photosList = mutableListOf<PhotoEntity>()
     //albums
-    private val _liveData = MutableLiveData<Resource<List<AlbumItem>>>()
-    val liveData: LiveData<Resource<List<AlbumItem>>>
-    get() =  _liveData
+    private val _albumsLiveData = MutableLiveData<Resource<List<AlbumItem>>>()
+    val albumsLiveData: LiveData<Resource<List<AlbumItem>>>
+    get() =  _albumsLiveData
 
     //photos
     private val _photoLiveData = MutableLiveData<Resource<List<PhotoItem>>>()
@@ -32,15 +35,15 @@ class AlbumsViewModel(userId: Int, private val repo: AlbumsDataRepo, private val
         getAlbums(userId)
     }
 
-    private fun getAlbums(id: Int) {
-        viewModelScope.launch {
+    fun getAlbums(id: Int) {
+        job = viewModelScope.launch {
             makeApiCall(id)
         }
     }
 
     private suspend fun makeApiCall(id: Int) {
         withContext(Dispatchers.IO) {
-            _liveData.postValue(Resource(Status.LOADING, null, null))
+            _albumsLiveData.postValue(Resource(Status.LOADING, null, null))
             try {
                 val list = mutableListOf<AlbumEntity>()
                 val result = repo.getRemoteAlbums(id)
@@ -57,7 +60,16 @@ class AlbumsViewModel(userId: Int, private val repo: AlbumsDataRepo, private val
                 repo.deleteAlbums()
                 repo.setLocalAlbums(list.toList())
             } catch (t: Throwable) {
-                _liveData.postValue(Resource(Status.ERROR, null, t.message))
+                Log.d("bbbbbbbbbbbbbbbb", "makeApiCall: rrrrrr")
+                _albumsLiveData.postValue(Resource(Status.ERROR, null, t.message))
+            }
+        }
+    }
+
+    fun clearRoom() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                repo.deleteAlbums()
             }
         }
     }
@@ -66,19 +78,23 @@ class AlbumsViewModel(userId: Int, private val repo: AlbumsDataRepo, private val
         _photoLiveData.postValue(Resource(Status.LOADING, null, null))
         try {
             val result = photoRepo.getRemotePhotos(id)
-
             result.map {
                 photosList.add(PhotoEntity(it.id, it.albumId, it.title, it.url, it.thumbnailUrl))
             }
-            photoRepo.deletePhotos()
-            //TODO: I guess the photos should not be passed to local db(glide does so under the hood)
-            if (collected) photoRepo.setLocalPhotos(photosList.toList())
+            if (collected) {
+//                photoRepo.deletePhotos()
+                photoRepo.setLocalPhotos(photosList.toList())
+                collected = false
+            }
 
         } catch (t: Throwable) {
             _photoLiveData.postValue(Resource(Status.ERROR, null, t.message))
         }
     }
 
+    fun clearPhotoList() {
+        photosList.clear()
+    }
 
     fun getLocalAlbums(): LiveData<List<AlbumEntity>> {
         return repo.getLocalAlbums()
@@ -86,5 +102,10 @@ class AlbumsViewModel(userId: Int, private val repo: AlbumsDataRepo, private val
 
     fun getLocalPhotos(): LiveData<List<PhotoEntity>> {
         return photoRepo.getLocalPhotos()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        if (!job.isCancelled) job.cancel()
     }
 }

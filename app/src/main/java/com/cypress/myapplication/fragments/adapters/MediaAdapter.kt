@@ -1,6 +1,5 @@
 package com.cypress.myapplication.fragments.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,7 +61,6 @@ class MediaAdapter: RecyclerView.Adapter<MediaAdapter.MediaViewHolder>()  {
     fun setAction(action: String) {
         when(action) {
             NOTIFICATION_SNOOZE_ACTION -> {
-                Log.d("sdfsdsdf", "setAction: sdfsdf")
                 mediaItems[oldItemPosition].isIconVisibile = false
                 notifyItemChanged(oldItemPosition)
             }

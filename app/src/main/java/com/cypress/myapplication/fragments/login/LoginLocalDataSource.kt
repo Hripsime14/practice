@@ -5,9 +5,9 @@ import com.cypress.myapplication.constants.LOGIN_KEY
 
 class LoginLocalDataSource(private var sharedPreference: SharedPreferences) {
 
-    fun setLoginFinished(isLoginFinished: Boolean) {
-        val editor = sharedPreference?.edit()
-        editor?.putBoolean(LOGIN_KEY, isLoginFinished)
+    fun setLoginFinished() {
+        val editor = sharedPreference.edit()
+        editor?.putBoolean(LOGIN_KEY, true)
         editor?.apply()
     }
 }

@@ -1,6 +1,6 @@
 package com.cypress.myapplication.fragments.intro
 
-class IntroDataRepo(val introLocalDataSource: IntroLocalDataSource) {
+class IntroDataRepo(private val introLocalDataSource: IntroLocalDataSource) {
 
-    fun setIntroFinished(isIntroFinished: Boolean) = introLocalDataSource.setIntroFinished(isIntroFinished)
+    fun setIntroFinished() = introLocalDataSource.setIntroFinished()
 }

@@ -1,4 +1,4 @@
-package com.cypress.myapplication.main
+package com.cypress.myapplication.activities.main
 
 import android.content.SharedPreferences
 import com.cypress.myapplication.constants.INTRO_KEY

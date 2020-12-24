@@ -1,6 +1,5 @@
 package com.cypress.myapplication.fragments.users
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.cypress.myapplication.backend.UserEntity
 

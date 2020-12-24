@@ -8,7 +8,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import com.cypress.myapplication.NewActivity
+import com.cypress.myapplication.activities.PracticeActivity
 import com.cypress.myapplication.R
 import com.cypress.myapplication.databinding.FragmentContactDetailsBinding
 import com.cypress.myapplication.modeldatas.model.ContactItem
@@ -102,6 +102,6 @@ class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        contactItem?.let { (activity as NewActivity).setUpdatedContact(it) }
+        contactItem?.let { (activity as PracticeActivity).setUpdatedContact(it) }
     }
 }

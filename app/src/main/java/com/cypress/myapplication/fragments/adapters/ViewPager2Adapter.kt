@@ -1,4 +1,4 @@
-package com.cypress.myapplication
+package com.cypress.myapplication.fragments.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.cypress.myapplication.R
+import com.cypress.myapplication.modeldatas.model.IntroItem
 
 class ViewPager2Adapter: RecyclerView.Adapter<ViewPager2Adapter.ViewHolder>() {
-
     private val diffCallBack = object : DiffUtil.ItemCallback<IntroItem>() {
         override fun areItemsTheSame(oldItem: IntroItem, newItem: IntroItem): Boolean =
             oldItem.title == newItem.title
@@ -44,9 +45,9 @@ class ViewPager2Adapter: RecyclerView.Adapter<ViewPager2Adapter.ViewHolder>() {
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val title = itemView.findViewById<TextView>(R.id.title)
-        val desc = itemView.findViewById<TextView>(R.id.desc)
-        val img = itemView.findViewById<ImageView>(R.id.img)
+        private val title: TextView = itemView.findViewById(R.id.title)
+        private val desc: TextView  = itemView.findViewById(R.id.desc)
+        private val img: ImageView = itemView.findViewById(R.id.img)
         fun bind(item: IntroItem) {
             title.text = item.title
             desc.text = item.description

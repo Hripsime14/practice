@@ -10,7 +10,7 @@ import android.widget.Toast
 import com.cypress.myapplication.R
 import com.cypress.myapplication.util.isEmailValid
 import com.cypress.myapplication.databinding.FragmentLoginBinding
-import com.cypress.myapplication.main.MainActivity
+import com.cypress.myapplication.activities.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -47,10 +47,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         login.setOnClickListener {
             if (isEmailValid(email.text.toString())) {
                 Toast.makeText(context, "Your email is valid", Toast.LENGTH_SHORT).show()
-                viewModel.setLoginFinished(true)
+                viewModel.setLoginFinished()
                 (activity as MainActivity).openActivity()
             } else {
-                Toast.makeText(context, "Your email is nottt valid", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Your email is not valid", Toast.LENGTH_SHORT).show()
             }
         }
     }

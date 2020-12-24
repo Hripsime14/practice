@@ -11,16 +11,16 @@
         android:id="@+id/button_enable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enable"
+        android:text="@string/enable"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/button_next"
-        app:layout_constraintTop_toBottomOf="@+id/view_pager2"
+        app:layout_constraintTop_toBottomOf="@+id/view_pager"
         android:visibility="gone"/>
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager2"
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableEnd="@drawable/arrow_forward"
-        android:text="Next"
+        android:text="@string/next"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/tab_layout"
         app:layout_constraintEnd_toEndOf="parent"

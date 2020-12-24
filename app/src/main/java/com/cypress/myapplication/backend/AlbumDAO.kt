@@ -6,8 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.cypress.myapplication.constants.ALBUM_DB
-import com.cypress.myapplication.constants.USER_DB
-import retrofit2.http.DELETE
 
 @Dao
 interface AlbumDAO  {

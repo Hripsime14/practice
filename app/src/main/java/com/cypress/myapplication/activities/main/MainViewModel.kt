@@ -1,4 +1,4 @@
-package com.cypress.myapplication.main
+package com.cypress.myapplication.activities.main
 
 import androidx.lifecycle.ViewModel
 

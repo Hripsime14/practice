@@ -2,15 +2,14 @@ package com.cypress.myapplication.fragments.users
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.cypress.myapplication.NewActivity
+import com.cypress.myapplication.activities.PracticeActivity
 import com.cypress.myapplication.R
 import com.cypress.myapplication.Status
 import com.cypress.myapplication.backend.UserEntity
@@ -26,35 +25,16 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var adapter : UsersAdapter? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.overflow_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return NavigationUI.onNavDestinationSelected(
-            item,
-            requireView().findNavController()
-        ) || super.onOptionsItemSelected(item)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as NewActivity).setTitle("Users")
+        (activity as PracticeActivity).setTitle("Users")
         binding = FragmentUsersBinding.bind(view)
         list = binding.usersList
         swipeRefreshLayout = binding.usersSwipe
 
         observeUsers()
         setListeners()
-
 
         viewModel.liveData.observe(viewLifecycleOwner) {
             when(it.status) {
@@ -71,7 +51,7 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
     private fun createList(list: List<UserEntity>) {
         adapter = UsersAdapter(object : UsersAdapter.RecyclerViewItemClickListener {
             override fun recyclerViewItemClicked(userId: Int) {
-                (activity as NewActivity).addFragment(AlbumsFragment.newInstance(userId))
+                (activity as PracticeActivity).replaceFragment(AlbumsFragment.newInstance(userId))
             }
         })
 
@@ -81,11 +61,10 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
     }
 
     private fun setListeners() {
-
         swipeRefreshLayout.setOnRefreshListener {
-            val handler = Handler()
+            val handler =  Handler(Looper.getMainLooper())
             val runnable = Runnable {
-                observeUsers()
+                viewModel.getUsers()
                 swipeRefreshLayout.isRefreshing = false
             }
             handler.postDelayed(runnable, 1500.toLong())
@@ -94,7 +73,6 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
 
     private fun observeUsers() {
         viewModel.getLocalUsers().observe(viewLifecycleOwner) {
-
             it?.let {
                 createList(it)
             }

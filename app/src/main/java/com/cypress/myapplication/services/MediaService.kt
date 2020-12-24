@@ -16,7 +16,7 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
-import com.cypress.myapplication.NewActivity
+import com.cypress.myapplication.activities.PracticeActivity
 import com.cypress.myapplication.R
 import com.cypress.myapplication.constants.*
 import com.cypress.myapplication.fragments.media.MediaFragment
@@ -27,39 +27,39 @@ import com.cypress.myapplication.modeldatas.model.MediaItem
 class MediaService: Service(), OnAudioFocusChangeListener{
     private var notificationLayout: RemoteViews? = null
     private var notificationLayoutExpanded: RemoteViews? = null
-    private lateinit var audioManager: AudioManager
+    private var audioManager: AudioManager? = null
     companion object {
         var curMedia: MediaItem? = null
     }
 
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
     
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
 
     override fun onCreate() {
-        createChannel()
+        createNotificationChannel()
         mediaPlayer = MediaPlayer()
         notificationLayout = RemoteViews(packageName, R.layout.notification_small)
         notificationLayoutExpanded= RemoteViews(packageName, R.layout.notification_large)
     }
 
-    private fun createChannel() {
+    private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "MediaChannel"
             val descriptionText = "This is the channel for media data notifications"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val mChannel = NotificationChannel(CHANNEL_ID, name, importance)
-            mChannel.description = descriptionText
+            val channel = NotificationChannel(CHANNEL_ID, name, importance)
+            channel.description = descriptionText
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(mChannel)
+            notificationManager.createNotificationChannel(channel)
         }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        audioManager.requestAudioFocus(this, STREAM_MUSIC, AUDIOFOCUS_GAIN);
+        audioManager?.requestAudioFocus(this, STREAM_MUSIC, AUDIOFOCUS_GAIN)
             when (intent?.action) {
                 PLAY_ACTION -> {
                     resume()
@@ -95,7 +95,7 @@ class MediaService: Service(), OnAudioFocusChangeListener{
         snoozeFromNotification()
         pauseFromNotification()
         playFromNotification()
-        showNotification(intent?.action)
+        showNotification()
         return START_REDELIVER_INTENT
     }
 
@@ -153,29 +153,29 @@ class MediaService: Service(), OnAudioFocusChangeListener{
     }
 
     private fun start() {
-        mediaPlayer.reset()
-        mediaPlayer.setDataSource(curMedia?.uri)
-        mediaPlayer.prepare()
-        mediaPlayer.start()
+        mediaPlayer?.reset()
+        mediaPlayer?.setDataSource(curMedia?.uri)
+        mediaPlayer?.prepare()
+        mediaPlayer?.start()
         curMedia?.mode = Mode.PLAY
     }
 
     private fun pause() {
-        if (mediaPlayer.isPlaying) {
+        if (mediaPlayer?.isPlaying == true) {
             curMedia?.mode = Mode.PAUSE
-            mediaPlayer.pause()
+            mediaPlayer?.pause()
         }
     }
 
     private fun resume() {
-        if (!mediaPlayer.isPlaying) {
+        if (mediaPlayer?.isPlaying != true) {
             curMedia?.mode = Mode.PLAY
-            mediaPlayer.start()
+            mediaPlayer?.start()
         }
     }
 
 
-    private fun showNotification(action: String?)
+    private fun showNotification()
     {
         notificationLayout?.setTextViewText(R.id.sNotificationTitle, curMedia?.title)
         notificationLayout?.setTextViewTextSize(
@@ -191,7 +191,7 @@ class MediaService: Service(), OnAudioFocusChangeListener{
             30F
         )
 
-        val intent = Intent(this, NewActivity::class.java).apply {
+        val intent = Intent(this, PracticeActivity::class.java).apply {
             this.action = OPEN_MEDIA_ACTION
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -216,37 +216,39 @@ class MediaService: Service(), OnAudioFocusChangeListener{
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 
     override fun onAudioFocusChange(focusChange: Int) {
         Log.d("fffff0", "onAudioFocusChange: dfgdfg")
+//        mediaPlayer = MediaPlayer()
         when (focusChange) {
             AUDIOFOCUS_GAIN ->     //ThefocusChange service gained audio focus, so it needs to start playing.
-                if (!mediaPlayer.isPlaying) {
+                if (mediaPlayer?.isPlaying != true) {
                     Log.d("ffffffffffffff", "onAudioFocusChange: ffff")
                     resume()
-                    showNotification(PLAY_ACTION)
+                    showNotification()
                     sendBroadcast(NOTIFICATION_PAUSE_ACTION)
                 }
             AUDIOFOCUS_LOSS ->     // The service lost audio focus, the user probably moved to playing media on another app.
-                if (mediaPlayer.isPlaying) {
+                if (mediaPlayer?.isPlaying == true) {
                     Log.d("ffffffffffffff1", "onAudioFocusChange: ffff")
                     pause()
                     makePlayVisible()
-                    showNotification(PAUSE_ACTION)
+                    showNotification()
                     sendBroadcast(NOTIFICATION_PAUSE_ACTION)
                 }
             AUDIOFOCUS_LOSS_TRANSIENT ->     //Fucos lost for a short time, pause the MediaPlayer.
-                if (mediaPlayer.isPlaying) {
+                if (mediaPlayer?.isPlaying == true) {
                     Log.d("ffffffffffffff2", "onAudioFocusChange: ffff")
                     pause()
                     sendBroadcast(PAUSE_ACTION)
                 }
             AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK ->     // Lost focus for a short time, probably a notification arrived on the device, lower the playback volume.
-                if (mediaPlayer.isPlaying) {
+                if (mediaPlayer?.isPlaying == true) {
                     Log.d("ffffffffffffff3", "onAudioFocusChange: ffff")
-                    mediaPlayer.setVolume(0.1f, 0.1f)
+                    mediaPlayer?.setVolume(0.1f, 0.1f)
                 }
         }
     }

@@ -2,7 +2,6 @@ package com.cypress.myapplication.manager
 
 import android.app.Activity
 import android.provider.ContactsContract
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.cypress.myapplication.modeldatas.model.ContactItem
@@ -25,7 +24,7 @@ class ContactManager {
         val emailCols = listOf(
             ContactsContract.CommonDataKinds.Email.ADDRESS,
             ContactsContract.CommonDataKinds.Email.CONTACT_ID
-        ).toTypedArray() //TODO: check what is typed array
+        ).toTypedArray()
 
 
         lateinit var contactItem: ContactItem
