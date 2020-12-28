@@ -22,6 +22,7 @@ class PhotosAdapter: RecyclerView.Adapter<PhotosAdapter.PhotosViewHolder>() {
 
         override fun areContentsTheSame(oldItem: PhotoEntity, newItem: PhotoEntity): Boolean =
             oldItem.hashCode() == newItem.hashCode()
+
     }
 
     private val differPhotos = AsyncListDiffer(this, diffCallBackPhotos)

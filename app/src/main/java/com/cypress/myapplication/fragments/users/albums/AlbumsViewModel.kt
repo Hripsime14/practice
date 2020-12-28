@@ -54,13 +54,13 @@ class AlbumsViewModel(userId: Int, private val repo: AlbumsDataRepo, private val
                     makeApiCallPhotos(result[i].id)
                 }
 
+                _albumsLiveData.postValue(Resource(Status.SUCCESS, null, null))
                 result.map {
                     list.add(AlbumEntity(it.id, it.title))
                 }
                 repo.deleteAlbums()
                 repo.setLocalAlbums(list.toList())
             } catch (t: Throwable) {
-                Log.d("bbbbbbbbbbbbbbbb", "makeApiCall: rrrrrr")
                 _albumsLiveData.postValue(Resource(Status.ERROR, null, t.message))
             }
         }
@@ -78,11 +78,12 @@ class AlbumsViewModel(userId: Int, private val repo: AlbumsDataRepo, private val
         _photoLiveData.postValue(Resource(Status.LOADING, null, null))
         try {
             val result = photoRepo.getRemotePhotos(id)
+            _photoLiveData.postValue(Resource(Status.SUCCESS, null, null))
             result.map {
                 photosList.add(PhotoEntity(it.id, it.albumId, it.title, it.url, it.thumbnailUrl))
             }
             if (collected) {
-//                photoRepo.deletePhotos()
+                photoRepo.deletePhotos()
                 photoRepo.setLocalPhotos(photosList.toList())
                 collected = false
             }

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cypress.myapplication.activities.PracticeActivity
 import com.cypress.myapplication.R
 import com.cypress.myapplication.databinding.FragmentContactsBinding
+import com.cypress.myapplication.fragments.BaseFragment
 import com.cypress.myapplication.fragments.adapters.ContactsAdapter
 import com.cypress.myapplication.fragments.contacts.details.ContactDetailsFragment
 import com.cypress.myapplication.manager.SwipeToDelete
@@ -20,7 +21,7 @@ import com.cypress.myapplication.modeldatas.model.ContactItem
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class ContactsFragment : Fragment(R.layout.fragment_contacts) {
+class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
     private lateinit var recyclerView: RecyclerView
     private val viewModel: ContactViewModel by viewModel()
     private lateinit var list: MutableList<ContactItem>
@@ -34,8 +35,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as PracticeActivity).setTitle("Contacts")
-        setHasOptionsMenu(true)
+        setTitle("Contacts")
         bindViews(view)
         (activity as PracticeActivity).setIsContactPermGranted {
             if(it) {

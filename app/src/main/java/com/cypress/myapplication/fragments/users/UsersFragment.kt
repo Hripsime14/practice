@@ -3,22 +3,22 @@ package com.cypress.myapplication.fragments.users
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.*
+import android.view.View
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.cypress.myapplication.activities.PracticeActivity
 import com.cypress.myapplication.R
 import com.cypress.myapplication.Status
+import com.cypress.myapplication.activities.PracticeActivity
 import com.cypress.myapplication.backend.UserEntity
 import com.cypress.myapplication.databinding.FragmentUsersBinding
+import com.cypress.myapplication.fragments.BaseFragment
 import com.cypress.myapplication.fragments.adapters.UsersAdapter
 import com.cypress.myapplication.fragments.users.albums.AlbumsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class UsersFragment : Fragment(R.layout.fragment_users) {
+class UsersFragment : BaseFragment(R.layout.fragment_users) {
     private lateinit var binding: FragmentUsersBinding
     private val viewModel: UsersViewModel by viewModel()
     private lateinit var list: RecyclerView
@@ -38,9 +38,14 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
 
         viewModel.liveData.observe(viewLifecycleOwner) {
             when(it.status) {
-                Status.SUCCESS -> Unit
-                Status.LOADING-> {}
+                Status.SUCCESS -> {
+                    hideLoadingDialog()
+                }
+                Status.LOADING -> {
+                    showLoadingDialog()
+                }
                 Status.ERROR -> {
+                    hideLoadingDialog()
                     Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                 }
             }

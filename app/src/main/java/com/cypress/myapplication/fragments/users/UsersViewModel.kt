@@ -40,6 +40,7 @@ class UsersViewModel(private val repo: UsersDataRepo) : ViewModel() {
                 result.map {
                     list.add(UserEntity(it.id, it.email, it.username))
                 }
+                _liveData.postValue(Resource(Status.SUCCESS, null, null))
                 repo.setUsersDB(list.toList()) //saving data in local db
 
             } catch (t: Throwable) {

@@ -15,12 +15,13 @@ import com.cypress.myapplication.Status
 import com.cypress.myapplication.backend.AlbumEntity
 import com.cypress.myapplication.backend.PhotoEntity
 import com.cypress.myapplication.databinding.FragmentAlbumsBinding
+import com.cypress.myapplication.fragments.BaseFragment
 import com.cypress.myapplication.fragments.adapters.AlbumsAdapter
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
-class AlbumsFragment : Fragment(R.layout.fragment_albums) {
+class AlbumsFragment : BaseFragment(R.layout.fragment_albums) {
     private lateinit var binding: FragmentAlbumsBinding
     private var viewModel: AlbumsViewModel? = null
     private var userId by Delegates.notNull<Int>()
@@ -78,9 +79,14 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
 
         viewModel?.albumsLiveData?.observe(viewLifecycleOwner) {
             when (it.status) {
-                Status.SUCCESS -> Unit
-                Status.LOADING -> {}
+                Status.SUCCESS -> {
+                    hideLoadingDialog()
+                }
+                Status.LOADING -> {
+                    showLoadingDialog()
+                }
                 Status.ERROR -> {
+                    hideLoadingDialog()
                     Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -131,6 +137,8 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
 
     override fun onDestroyView() {
         viewModel?.clearRoom()
+        albumList.clear()
+
         super.onDestroyView()
     }
 }

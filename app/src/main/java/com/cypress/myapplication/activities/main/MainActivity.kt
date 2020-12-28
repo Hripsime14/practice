@@ -3,6 +3,7 @@ package com.cypress.myapplication.activities.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Window
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import com.cypress.myapplication.activities.PracticeActivity
 import com.cypress.myapplication.databinding.ActivityMainBinding
 import com.cypress.myapplication.fragments.intro.IntroFragment
 import com.cypress.myapplication.fragments.login.LoginFragment
+import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {

@@ -12,6 +12,7 @@ import com.cypress.myapplication.R
 import com.cypress.myapplication.constants.*
 import com.cypress.myapplication.fragments.media.Mode
 import com.cypress.myapplication.modeldatas.model.MediaItem
+import kotlinx.coroutines.SupervisorJob
 
 class MediaAdapter: RecyclerView.Adapter<MediaAdapter.MediaViewHolder>()  {
     private var oldItemPosition = -1
@@ -99,6 +100,7 @@ class MediaAdapter: RecyclerView.Adapter<MediaAdapter.MediaViewHolder>()  {
             if (!mediaItem.isIconVisibile) {
                 pause.visibility = View.GONE
                 play.visibility = View.GONE
+                SupervisorJob()
             } else {
                 if (mediaItem.mode == Mode.PLAY) {
                     pause.visibility = View.VISIBLE

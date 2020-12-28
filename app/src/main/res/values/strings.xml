@@ -19,4 +19,5 @@
     <string name="don_t_have_an_account_register">Don’t have an account? Register</string>
     <string name="title">Title</string>
     <string name="username">username</string>
+    <string name="loading">Loading</string>
 </resources>

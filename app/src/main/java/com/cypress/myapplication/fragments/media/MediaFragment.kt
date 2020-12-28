@@ -20,13 +20,14 @@ import com.cypress.myapplication.constants.NOTIFICATION_PAUSE_ACTION
 import com.cypress.myapplication.constants.NOTIFICATION_PLAY_ACTION
 import com.cypress.myapplication.constants.NOTIFICATION_SNOOZE_ACTION
 import com.cypress.myapplication.databinding.FragmentMediaBinding
+import com.cypress.myapplication.fragments.BaseFragment
 import com.cypress.myapplication.fragments.adapters.MediaAdapter
 import com.cypress.myapplication.modeldatas.model.MediaItem
 import com.cypress.myapplication.services.KEY
 import com.cypress.myapplication.services.MediaService
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MediaFragment : Fragment(R.layout.fragment_media) {
+class MediaFragment : BaseFragment(R.layout.fragment_media) {
     private lateinit var recyclerView: RecyclerView
     private val viewModel: MediaViewModel by viewModel()
     private lateinit var adapter: MediaAdapter
@@ -54,9 +55,7 @@ class MediaFragment : Fragment(R.layout.fragment_media) {
         bindViews(view)
 
         (activity as PracticeActivity).setIsMediaPermGranted {
-            Log.d("zzzzz0", "onViewCreated: ")
             if(it) {
-                Log.d("zzzzz1", "onViewCreated: ")
                 getPermission()
             } else {
                 (activity as PracticeActivity).supportFragmentManager.popBackStack()

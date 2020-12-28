@@ -2,6 +2,7 @@ package com.cypress.myapplication.activities
 
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,10 @@ import com.cypress.myapplication.fragments.users.UsersFragment
 import com.cypress.myapplication.modeldatas.model.ContactItem
 import com.cypress.myapplication.services.OPEN_MEDIA_ACTION
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class PracticeActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
@@ -36,6 +41,24 @@ class PracticeActivity : AppCompatActivity() {
         setListeners()
         setTitle("Users")
         checkIntentAction()
+        GlobalScope.launch {
+            delay(1000)
+                delay(10000)
+                val c1 = call1()
+                val c2 = call2()
+                Log.d("qqqqqqqqq", "onCreate: $c1")
+                Log.d("qqqqqqqq", "onCreate: $c2")
+            }
+    }
+
+    suspend fun call1(): String {
+        delay(3000L)
+        return "1"
+    }
+
+    suspend fun call2(): String {
+        delay(3000L)
+        return "2"
     }
 
     private fun initViews() {
