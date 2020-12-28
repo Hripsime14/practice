@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,14 +47,10 @@ class AlbumsFragment : BaseFragment(R.layout.fragment_albums) {
         binding = FragmentAlbumsBinding.bind(view)
         list = binding.albumsList
         swipeRefreshLayout = binding.albumsSwipe
-        setActionBarTitle()
+        setTitle("Albums")
 
         observeData()
         setListeners()
-    }
-
-    private fun setActionBarTitle() {
-        (activity as PracticeActivity).setTitle("Albums")
     }
 
     private fun observeData() {

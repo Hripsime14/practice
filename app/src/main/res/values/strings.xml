@@ -20,4 +20,5 @@
     <string name="title">Title</string>
     <string name="username">username</string>
     <string name="loading">Loading</string>
+    <string name="contact_empty_message">You don\'t have contacts with emails</string>
 </resources>

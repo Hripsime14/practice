@@ -50,7 +50,7 @@ class MediaFragment : BaseFragment(R.layout.fragment_media) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as PracticeActivity).setTitle("Media")
+        setTitle("Media")
 
         bindViews(view)
 

@@ -5,8 +5,8 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +26,7 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
     private val viewModel: ContactViewModel by viewModel()
     private lateinit var list: MutableList<ContactItem>
     private var pos = -1
+    private lateinit var messageText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,11 +46,13 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
             }
         }
         viewModel.getLiveData().observe(viewLifecycleOwner) {
+            if (it.isNullOrEmpty()) {
+                changeVisibility(false)
+            } else changeVisibility(true)
             list = it as MutableList<ContactItem>
             createList(it)
         }
         getContacts()
-
 
         (activity as PracticeActivity).setOnUpdatedContact(object : PracticeActivity.OnUpdateContact {
             override fun onUpdateContact(contact: ContactItem) {
@@ -57,6 +60,18 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
                 createList(list)
             }
         })
+    }
+
+    private fun changeVisibility(isListVisible: Boolean) {
+        if (isListVisible) {
+            recyclerView.visibility = View.VISIBLE
+            messageText.visibility = View.GONE
+        } else {
+            recyclerView.visibility = View.GONE
+            messageText.visibility = View.VISIBLE
+            messageText.text = getString(R.string.contact_empty_message)
+        }
+
     }
 
     private fun  getContacts(){
@@ -68,6 +83,7 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
     private fun bindViews(view: View) {
         val binding = FragmentContactsBinding.bind(view)
         recyclerView = binding.contactsList
+        messageText = binding.messageText
     }
 
     private fun createList(list: List<ContactItem>) {
