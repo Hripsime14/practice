@@ -41,24 +41,6 @@ class PracticeActivity : AppCompatActivity() {
         setListeners()
         setTitle("Users")
         checkIntentAction()
-        GlobalScope.launch {
-            delay(1000)
-                delay(10000)
-                val c1 = call1()
-                val c2 = call2()
-                Log.d("qqqqqqqqq", "onCreate: $c1")
-                Log.d("qqqqqqqq", "onCreate: $c2")
-            }
-    }
-
-    suspend fun call1(): String {
-        delay(3000L)
-        return "1"
-    }
-
-    suspend fun call2(): String {
-        delay(3000L)
-        return "2"
     }
 
     private fun initViews() {

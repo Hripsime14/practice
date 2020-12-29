@@ -48,11 +48,18 @@ class MediaFragment : BaseFragment(R.layout.fragment_media) {
         activity?.registerReceiver(broadcast, intentFilter)
     }
 
+    private fun addIntentFilterActions(intentFilter: IntentFilter) {
+        intentFilter.addAction(NOTIFICATION_SNOOZE_ACTION)
+        intentFilter.addAction(NOTIFICATION_PLAY_ACTION)
+        intentFilter.addAction(NOTIFICATION_PAUSE_ACTION)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle("Media")
 
         bindViews(view)
+
 
         (activity as PracticeActivity).setIsMediaPermGranted {
             if(it) {
@@ -69,12 +76,6 @@ class MediaFragment : BaseFragment(R.layout.fragment_media) {
 
     }
 
-    private fun addIntentFilterActions(intentFilter: IntentFilter) {
-        intentFilter.addAction(NOTIFICATION_SNOOZE_ACTION)
-        intentFilter.addAction(NOTIFICATION_PLAY_ACTION)
-        intentFilter.addAction(NOTIFICATION_PAUSE_ACTION)
-    }
-
     private fun isMyServiceRunning(serviceClassName: String): Boolean {
         val manager = requireActivity().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -86,9 +87,11 @@ class MediaFragment : BaseFragment(R.layout.fragment_media) {
     }
 
     private fun startService(mediaItem: MediaItem, action: String) {
+
         val intent = Intent(requireContext(), MediaService::class.java).apply {
             this.action = action
             putExtra(KEY, mediaItem)
+
         }
 
         (activity as PracticeActivity).startService(intent)
@@ -131,10 +134,12 @@ class MediaFragment : BaseFragment(R.layout.fragment_media) {
                 if (medList[i].id == mediaItem?.id) {
                     medList[i].isIconVisibile = mediaItem.isIconVisibile
                     medList[i].mode = mediaItem.mode
+                    adapter.setOldPosition(i)
                     break
                 }
             }
             adapter.mediaItems = medList
+            adapter.notifyDataSetChanged()
         }
         else  {
             adapter.mediaItems = list.toMutableList()

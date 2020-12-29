@@ -79,6 +79,10 @@ class MediaAdapter: RecyclerView.Adapter<MediaAdapter.MediaViewHolder>()  {
         }
     }
 
+    fun setOldPosition(pos: Int) {
+        oldItemPosition = pos
+    }
+
 
     inner class MediaViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private lateinit var name: TextView
@@ -103,7 +107,6 @@ class MediaAdapter: RecyclerView.Adapter<MediaAdapter.MediaViewHolder>()  {
             if (!mediaItem.isIconVisibile) {
                 pause.visibility = View.GONE
                 play.visibility = View.GONE
-                SupervisorJob()
             } else {
                 if (mediaItem.mode == Mode.PLAY) {
                     pause.visibility = View.VISIBLE

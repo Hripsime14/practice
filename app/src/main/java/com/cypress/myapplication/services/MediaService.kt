@@ -33,7 +33,7 @@ class MediaService: Service(), OnAudioFocusChangeListener{
     }
 
     private var mediaPlayer: MediaPlayer? = null
-    
+
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -153,6 +153,7 @@ class MediaService: Service(), OnAudioFocusChangeListener{
     }
 
     private fun start() {
+        Log.d("sssssssssssssss", "start: ssss")
         mediaPlayer?.reset()
         mediaPlayer?.setDataSource(curMedia?.uri)
         mediaPlayer?.prepare()
@@ -193,6 +194,7 @@ class MediaService: Service(), OnAudioFocusChangeListener{
 
         val intent = Intent(this, PracticeActivity::class.java).apply {
             this.action = OPEN_MEDIA_ACTION
+            this.putExtra("dadam", "FROM_NOTIFICATION")
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
