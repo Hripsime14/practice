@@ -11,11 +11,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.cypress.myapplication.activities.PracticeActivity
 import com.cypress.myapplication.R
+import com.cypress.myapplication.activities.PracticeActivity
 import com.cypress.myapplication.constants.NOTIFICATION_PAUSE_ACTION
 import com.cypress.myapplication.constants.NOTIFICATION_PLAY_ACTION
 import com.cypress.myapplication.constants.NOTIFICATION_SNOOZE_ACTION
@@ -34,6 +33,7 @@ class MediaFragment : BaseFragment(R.layout.fragment_media) {
     private val broadcast = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.action?.let {
+                Log.d("bbbbbbbbbbbb", "onReceive: ")
                 adapter.setAction(it)
             }
         }

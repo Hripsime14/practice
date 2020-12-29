@@ -28,12 +28,12 @@ class MediaManager {
             MediaStore.Video.Media._ID
         ).toTypedArray()
 
-        val where =  MediaStore.Audio.Media.DATA + " like ? "
+//        val where =  MediaStore.Audio.Media.DATA + " like ? "
         val songResults = activity.contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-            songCols, where, arrayOf("%practice_mractice%"), MediaStore.Audio.Media.DEFAULT_SORT_ORDER)
+            songCols, /*where*/null , /*arrayOf("%practice_mractice%")*/ null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER)
 
         val videoResults = activity.contentResolver.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-            videoCols, where,  arrayOf("%practice_mractice%"), MediaStore.Video.Media.DEFAULT_SORT_ORDER)
+            videoCols, /*where*/ null,  /*arrayOf("%practice_mractice%")*/ null, MediaStore.Video.Media.DEFAULT_SORT_ORDER)
 
         lateinit var mediaItem: MediaItem
         if (songResults != null && songResults.moveToFirst()) {

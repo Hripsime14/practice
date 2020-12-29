@@ -1,5 +1,6 @@
 package com.cypress.myapplication.fragments.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.cypress.myapplication.constants.*
 import com.cypress.myapplication.fragments.media.Mode
 import com.cypress.myapplication.modeldatas.model.MediaItem
 import kotlinx.coroutines.SupervisorJob
+import kotlin.math.log
 
 class MediaAdapter: RecyclerView.Adapter<MediaAdapter.MediaViewHolder>()  {
     private var oldItemPosition = -1
@@ -60,6 +62,7 @@ class MediaAdapter: RecyclerView.Adapter<MediaAdapter.MediaViewHolder>()  {
     override fun getItemCount() = mediaItems.count()
 
     fun setAction(action: String) {
+        Log.d("bbbbbbb", "setAction: $action")
         when(action) {
             NOTIFICATION_SNOOZE_ACTION -> {
                 mediaItems[oldItemPosition].isIconVisibile = false
